@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {ProjectsService} from "../../../services/projects.service";
+import {Log} from "../../../models/Log";
 
 @Component({
   selector: 'app-log-list',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LogListComponent implements OnInit {
 
-  constructor() { }
+  @Input() logs: Log[];
+  @Input() currentRouteId: string;
+
+  constructor(public projectService: ProjectsService) {
+  }
 
   ngOnInit() {
+
   }
 
 }
