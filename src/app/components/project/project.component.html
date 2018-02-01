@@ -1,5 +1,7 @@
 <h3 class="text-center mb-3">{{currentProject.name}}</h3>
-<app-log-form></app-log-form>
+<app-log-form
+  [currentRouteId]="currentRouteId"
+></app-log-form>
 <app-log-list
   [logs]="currentProject.logs"
   [currentRouteId]="currentRouteId"

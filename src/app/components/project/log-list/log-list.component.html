@@ -1,6 +1,8 @@
 <ul class="list-group mt-5">
   <li class="list-group-item d-flex justify-content-between align-items-center"
     *ngFor="let log of logs"
+      (click)="onSelect(log)"
+      [ngClass]="{'list-group-item-secondary': selectedLog === log }"
   >
 
       <span>{{log.text}}</span>

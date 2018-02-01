@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
 import {Project} from "../models/Project";
+import { of } from "rxjs/observable/of"
+import {Observable} from "rxjs/Observable";
+import {Log} from "../models/Log";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 @Injectable()
 export class ProjectsService {
@@ -7,55 +11,67 @@ export class ProjectsService {
   projects: Project[];
   selectedProject: Project;
 
+  private logSource = new BehaviorSubject<Log>({id: null, text: null, date: null});
+  selectedLog = this.logSource.asObservable();
+
+  private stateSource = new BehaviorSubject<boolean>(true);
+  stateClear = this.stateSource.asObservable();
+
+
   constructor() {
-    this.projects = [
-      {
-        projectId: '1',
-        name: 'Easycode',
-        logs: [
-          {
-            id: '1',
-            text: 'Added componenet',
-            date: '20.01.2018 15:23:12'
-          },
-          {
-            id: '2',
-            text: 'Added services',
-            date: '20.01.2018 15:35:12'
-          }
-        ]
-      },
-      {
-        projectId: '200',
-        name: 'Amazon',
-        logs: [
-          {
-            id: '1',
-            text: 'Added http',
-            date: '20.01.2018 15:23:12'
-          }
-        ]
-      }
-    ]
+    this.projects =JSON.parse(localStorage.getItem('projects')) || [];
   }
 
-  getAllProject(){
-    return this.projects;
+  getAllProjects(): Observable<Project[]>{
+    return of(this.projects);
   }
 
-  getProject(id){
+  getProject(id): Observable<Project>{
     this.projects.forEach((current, i)=>{
       if (current.projectId === id) {
         this.selectedProject = current;
       }
     });
-    return this.selectedProject;
+    return of(this.selectedProject);
   }
 
   addProject(project){
-    console.log(project);
     this.projects.unshift(project);
+    localStorage.setItem('projects', JSON.stringify(this.projects));
+  }
+
+  addLog(log: Log, projectId: string){
+    this.projects.forEach(project=>{
+      if (project.projectId === projectId) {
+        project.logs.unshift(log);
+      }
+    });
+
+    // Add to localStorage
+    localStorage.setItem('projects', JSON.stringify(this.projects));
   }
 
 
+  updateLog(log:Log, projectId: string){
+    this.projects.forEach(project=>{
+      if (project.projectId === projectId) {
+        project.logs.forEach( (value, i) =>{
+          if (value.id === log.id) {
+            //delete old log
+            project.logs.splice(i, 1);
+          }
+        });
+        project.logs.unshift(log);
+      }
+    });
+  }
+
+  setFormLog(log: Log) {
+    this.logSource.next(log);
+  }
+
+  clearState() {
+    this.logSource.next({id: null, text: null, date: null});
+    this.stateSource.next(true);
+  }
 }
