@@ -10,11 +10,32 @@ import {ProjectsService} from "../../../services/projects.service";
 export class ProjectListComponent implements OnInit {
 
   @Input() projects: Project[];
+  selectProject: Project;
 
-  constructor() { }
-
-  ngOnInit() {
-
+  constructor(private projectService: ProjectsService) {
   }
 
+  ngOnInit() {
+    this.projectService.stateClear.subscribe(clearState => {
+      if (clearState) {
+        this.selectProject = {
+          projectId: '',
+          name: '',
+          logs: null
+        }
+      }
+    })
+  }
+
+  onSelect(project: Project) {
+    this.selectProject = project;
+  }
+
+  remoteProject(i: number) {
+    this.projectService.remoteProject(i);
+  }
+
+  editProject(project: Project) {
+    this.projectService.setSelectedProject(project);
+  }
 }

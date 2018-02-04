@@ -20,6 +20,7 @@ import { AppRoutingModule } from './app-routing/app-routing.module';
 //Services
 import {ProjectsService} from "./services/projects.service";
 import {UuidService} from "./services/uuid.service";
+import { AlertMessageComponent } from './alert-message/alert-message.component';
 
 
 
@@ -34,7 +35,8 @@ import {UuidService} from "./services/uuid.service";
     ProjectFormComponent,
     ProjectListComponent,
     LogFormComponent,
-    LogListComponent
+    LogListComponent,
+    AlertMessageComponent
   ],
   imports: [
     BrowserModule,

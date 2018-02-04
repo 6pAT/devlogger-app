@@ -41,4 +41,8 @@ export class LogListComponent implements OnInit {
     this.projectService.setFormLog(log);
     this.selectedLog = log;
   }
+
+  remoteLog(logId:number) {
+    this.projectService.remoteLog(logId, this.currentRouteId);
+  }
 }

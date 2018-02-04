@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ProjectsService} from "../../../services/projects.service";
 import {UuidService} from "../../../services/uuid.service";
+import {Log} from "../../../models/Log";
 
 @Component({
   selector: 'app-log-form',
@@ -17,13 +18,12 @@ export class LogFormComponent implements OnInit {
 
   isNew: boolean = true;
 
-  constructor(public projectServices: ProjectsService,
+  constructor(public projectService: ProjectsService,
               public uuid:UuidService) { }
 
   ngOnInit() {
     //подписываемся на выбор log
-    this.projectServices.selectedLog.subscribe( log => {
-      console.log(log);
+    this.projectService.selectedLog.subscribe(log => {
       if (log.id !== null) {
         this.id  = log.id;
         this.text = log.text;
@@ -35,20 +35,20 @@ export class LogFormComponent implements OnInit {
 
   onSubmit(){
     if (this.isNew) {
-      const newLog = {
+      const newLog:Log = {
         id: this.uuid.generate(),
         text: this.text,
         date: new Date()
       };
-      this.projectServices.addLog(newLog, this.currentRouteId);
+      this.projectService.addLog(newLog, this.currentRouteId);
     }else {
 
-      const updateLog = {
+      const updateLog:Log = {
         id: this.id,
         text: this.text,
         date: this.date
       };
-      this.projectServices.updateLog(updateLog, this.currentRouteId);
+      this.projectService.updateLog(updateLog, this.currentRouteId);
     }
     this.clearState();
   }
@@ -58,7 +58,7 @@ export class LogFormComponent implements OnInit {
     this.id  = '';
     this.text = '';
     this.date = '';
-    this.projectServices.clearState();
+    this.projectService.clearState();
   }
 
 }
