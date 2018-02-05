@@ -17,15 +17,6 @@ export class LogListComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.projectService.selectedLog.subscribe(log => {
-    //   if (log.id === null) {
-    //     this.selectedLog = {
-    //       id: '',
-    //       text: '',
-    //       date: ''
-    //     }
-    //   }
-    // })
     this.projectService.stateClear.subscribe(clearState => {
       if (clearState) {
         this.selectedLog = {
@@ -42,7 +33,7 @@ export class LogListComponent implements OnInit {
     this.selectedLog = log;
   }
 
-  remoteLog(logId:number) {
+  remoteLog(logId: number) {
     this.projectService.remoteLog(logId, this.currentRouteId);
   }
 }

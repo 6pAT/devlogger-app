@@ -10,7 +10,7 @@ import {Log} from "../../../models/Log";
 })
 export class LogFormComponent implements OnInit {
 
-  @Input() currentRouteId:string;
+  @Input() currentRouteId: string;
 
   id: string;
   text: string;
@@ -19,13 +19,14 @@ export class LogFormComponent implements OnInit {
   isNew: boolean = true;
 
   constructor(public projectService: ProjectsService,
-              public uuid:UuidService) { }
+              public uuid: UuidService) {
+  }
 
   ngOnInit() {
     //подписываемся на выбор log
     this.projectService.selectedLog.subscribe(log => {
       if (log.id !== null) {
-        this.id  = log.id;
+        this.id = log.id;
         this.text = log.text;
         this.date = log.date;
         this.isNew = false;
@@ -33,17 +34,17 @@ export class LogFormComponent implements OnInit {
     })
   }
 
-  onSubmit(){
+  onSubmit() {
     if (this.isNew) {
-      const newLog:Log = {
+      const newLog: Log = {
         id: this.uuid.generate(),
         text: this.text,
         date: new Date()
       };
       this.projectService.addLog(newLog, this.currentRouteId);
-    }else {
+    } else {
 
-      const updateLog:Log = {
+      const updateLog: Log = {
         id: this.id,
         text: this.text,
         date: this.date
@@ -53,9 +54,9 @@ export class LogFormComponent implements OnInit {
     this.clearState();
   }
 
-  clearState(){
+  clearState() {
     this.isNew = true;
-    this.id  = '';
+    this.id = '';
     this.text = '';
     this.date = '';
     this.projectService.clearState();

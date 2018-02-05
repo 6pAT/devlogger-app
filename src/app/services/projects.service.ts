@@ -17,26 +17,11 @@ export class ProjectsService {
   private logSource = new BehaviorSubject<Log>({id: null, text: null, date: null});
   selectedLog = this.logSource.asObservable();
 
-  setFormLog(log: Log) {
-    this.logSource.next(log);
-  }
-
   private stateSource = new BehaviorSubject<boolean>(true);
   stateClear = this.stateSource.asObservable();
 
-  clearState() {
-    this.logSource.next({id: null, text: null, date: null});
-    this.projectSource.next({projectId: null, name: null, logs: null});
-    this.stateSource.next(true);
-  }
-
-
   private projectSource = new BehaviorSubject<Project>({projectId: null, name: null, logs: null});
   selectedProject = this.projectSource.asObservable();
-
-  setSelectedProject(project: Project) {
-    this.projectSource.next(project);
-  }
 
   constructor() {
     this.projects = JSON.parse(localStorage.getItem('projects')) || [];
@@ -48,7 +33,6 @@ export class ProjectsService {
 
   getProject(id): Observable<Project> {
     let selectedProject: Project;
-
     this.projects.forEach((current) => {
       if (current.projectId === id) {
         selectedProject = current;
@@ -60,7 +44,6 @@ export class ProjectsService {
   addProject(project){
     this.projects.unshift(project);
     localStorage.setItem('projects', JSON.stringify(this.projects));
-
     //Show alert Message
     this.showMessageSource.next({message: `${project.name} successfully added`, show: true});
   }
@@ -73,7 +56,6 @@ export class ProjectsService {
     });
     //Show alert Message
     this.showMessageSource.next({message: `Log successfully added`, show: true});
-
     // Add to localStorage
     localStorage.setItem('projects', JSON.stringify(this.projects));
   }
@@ -121,4 +103,19 @@ export class ProjectsService {
     //Show alert Message
     this.showMessageSource.next({message: `Project was successfully deleted`, show: true});
   }
+
+  setFormLog(log: Log) {
+    this.logSource.next(log);
+  }
+
+  clearState() {
+    this.logSource.next({id: null, text: null, date: null});
+    this.projectSource.next({projectId: null, name: null, logs: null});
+    this.stateSource.next(true);
+  }
+
+  setSelectedProject(project: Project) {
+    this.projectSource.next(project);
+  }
 }
+

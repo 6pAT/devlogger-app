@@ -1,7 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ProjectsService} from "../../../services/projects.service";
 import {UuidService} from "../../../services/uuid.service";
-import {Project} from "../../../models/Project";
 
 @Component({
   selector: 'app-project-form',
@@ -14,11 +13,12 @@ export class ProjectFormComponent implements OnInit {
   projectName: string;
   isNew: boolean = true;
 
-  constructor(public projectService:ProjectsService,
-              public uuid: UuidService) { }
+  constructor(public projectService: ProjectsService,
+              public uuid: UuidService) {
+  }
 
   ngOnInit() {
-    this.projectService.selectedProject.subscribe(project=>{
+    this.projectService.selectedProject.subscribe(project => {
       if (project.projectId !== null) {
         this.projectName = project.name;
         this.currentId = project.projectId;
@@ -27,22 +27,22 @@ export class ProjectFormComponent implements OnInit {
     })
   }
 
-  onSubmit(){
+  onSubmit() {
     if (this.isNew) {
       this.projectService.addProject({
         projectId: this.uuid.generate(),
         name: this.projectName,
         logs: []
       });
-    }else {
+    } else {
       this.projectService.updateProject(this.projectName, this.currentId)
     }
     this.clearState()
   }
 
-  clearState(){
+  clearState() {
     this.isNew = true;
-    this.currentId  = '';
+    this.currentId = '';
     this.projectName = '';
     this.projectService.clearState();
   }
